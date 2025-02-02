@@ -33,3 +33,28 @@ export const client: ExtendedClient = new ExtendedClient({
   // await client.deleteCommand(RegisterType, 'command_id_here');
   // await client.deleteCommands(RegisterType, ['command_id_1', 'command_id_2']);
 })();
+
+// import axios from 'axios';
+
+// const PUUID = 'zohZfUzkHtUhtqxSvwIVXObw0pjxzpEa7qbs8VZOI16h6NV8tdhheLXE99kW8-E2bTy57cQ1Hk3Pcw';
+// const SHARD = 'ap';
+// const AUTH_TOKEN = 'your_auth_token_here'; // Replace with the actual auth token
+// const ENTITLEMENT_TOKEN = 'your_entitlement_token_here'; // Replace with the entitlement token
+// const CLIENT_PLATFORM = 'PC';
+// const CLIENT_VERSION = 'your_client_version_here'; // Replace with actual client version
+
+// axios
+//   .get(`https://pd.${SHARD}.a.pvp.net/match-history/v1/history/${PUUID}?startIndex=0&endIndex=10&queue=competitive`, {
+//     headers: {
+//       "X-Riot-ClientPlatform": CLIENT_PLATFORM,
+//       "X-Riot-ClientVersion": CLIENT_VERSION,
+//       "X-Riot-Entitlements-JWT": ENTITLEMENT_TOKEN,
+//       "Authorization": `Bearer ${AUTH_TOKEN}`
+//     }
+//   })
+//   .then(response => {
+//     console.log('Response:', response.data);
+//   })
+//   .catch(error => {
+//     console.error('Error:', error.response ? error.response.data : error.message);
+//   });

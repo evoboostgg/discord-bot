@@ -9,7 +9,7 @@ import {
 
 const defaultConfig: Config = {
   prefix: '!',
-  ownerId: 'YOUR_USER_ID',
+  ownerId: '1258651090707157096',
   eventsFolder: 'events',
   commandsFolder: 'commands',
   componentsFolder: 'components',
@@ -42,7 +42,7 @@ const defaultConfig: Config = {
   },
 
   logChannelConfig: {
-    channelId: 'YOUR_LOG_CHANNEL_ID',
+    channelId: '1334412667741409351',
     message: async (
       context: Interaction | ContextMenuCommandInteraction | Message,
       commandName: string,
@@ -53,6 +53,10 @@ const defaultConfig: Config = {
       };
     },
   },
+
+  rolesConfig: {
+    hiringManagerRole: '1334411183737798677'
+  }
 };
 
 export default defaultConfig;

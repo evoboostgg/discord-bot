@@ -15,6 +15,7 @@ export interface Config {
   defaultIntents: GatewayIntentBits[];
   deniedCommandReplies: any;
   logChannelConfig?: LogChannelConfig;
+  rolesConfig?: RolesConfig,
 }
 
 export interface LogChannelConfig {
@@ -24,4 +25,8 @@ export interface LogChannelConfig {
     commandName: string,
     commandType: string,
   ) => Promise<MessageReplyOptions>;
+}
+
+export interface RolesConfig {
+  hiringManagerRole: string,
 }
