@@ -28,8 +28,10 @@
     "discord.js": "^14.17.3",
     "dotenv": "^16.4.7",
     "mongoose": "^8.9.5",
+    "openai": "^4.82.0",
     "puppeteer": "^24.1.0",
     "tough-cookie": "^5.1.0",
+    "translate-google": "^1.5.0",
     "utf-8-validate": "^6.0.5"
   }
 }

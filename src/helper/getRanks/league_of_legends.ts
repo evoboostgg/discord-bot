@@ -71,10 +71,6 @@ async function getRankedData(summonerId: string, region: string): Promise<Ranked
 export async function getLeaugeOfLegendsPeakRank(gameTag: string): Promise<string | null> {
   try {
     const [username, tag] = gameTag.split('#');
-    if (!username || !tag) {
-      console.log("❌ Invalid format. Please use username#tag format");
-      return null;
-    }
 
     console.log(`searching for ${username}#${tag}...`);
   

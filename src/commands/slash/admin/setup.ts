@@ -1,4 +1,4 @@
-import { Button, RegisterType, SlashCommand } from '../../../handler';
+import { RegisterType, SlashCommand } from '../../../handler';
 import {
   ActionRowBuilder,
   AutocompleteInteraction,
@@ -38,7 +38,7 @@ export default new SlashCommand({
     const focusedValue: string = interaction.options.getFocused().toLowerCase();
     const choices: string[] = [
       'Ticket',
-      'Booster',
+      'Application',
     ];
 
     const filtered: string[] = choices.filter((choice) =>
@@ -99,30 +99,30 @@ export default new SlashCommand({
         break;
       }
 
-      case 'booster':{
-        channel.send({
+      case 'application':{
+        await channel.send({
           embeds: [
             new EmbedBuilder()
-            .setColor('#F1B754')
-            .setThumbnail('https://cdn.discordapp.com/attachments/1298155159482011691/1334423150678773855/wizard1.png?ex=679c79e7&is=679b2867&hm=90016561b4b78fec80bf58b57a35a142f1269899ae39e98b19e0686cb0214fbb&')
-            .setTitle('Yo, wanna join the squad? 🚀')
-            .setDescription('We’re always looking for skilled players to joins our boosting team, whether you have a main account, you’re a long time booster, or you re already working on another platform, we’ve got a spot for you.\n\n- **Default Application**:\n```For boosters who’ve got a main account ready to roll.```\n- **Special Application**:\n```For those boosting without a main account or already working on another platform.```\n- **Minimum Requirements**:\n\n- <:lol:1329707998226157619> **Leauge of Legends**\n> <:point:1329708644098506804> BR Server: Grand Master+\n> <:point:1329708644098506804>NA/EUW/EUNE Servers: Master 200 LP+\n\n- <:valorant:1329707851094167552> **Valorant**\n> <:point:1329708644098506804> Imortal 2+\n\n- <:tft:1329708007642107956> Teamfight Tactics\n> <:point:1329708644098506804> Master+')
+              .setColor('#F1B754')
+              .setThumbnail('https://cdn.discordapp.com/attachments/1298155159482011691/1334423150678773855/wizard1.png?ex=679c79e7&is=679b2867&hm=90016561b4b78fec80bf58b57a35a142f1269899ae39e98b19e0686cb0214fbb&')
+              .setTitle('Yo, wanna join the squad? 🚀')
+              .setDescription(`We're always looking for skilled players to join our team as boosters or coaches. Whether you have a main account or you're already working on another platform, we've got opportunities for you!\n\n**Minimum Requirements**:\n\n- <:lol:1329707998226157619> **League of Legends**\n> <:point:1329708644098506804> BR Server: Grand Master+\n> <:point:1329708644098506804>NA/EUW/EUNE Servers: Master 200 LP+\n\n- <:valorant:1329707851094167552> **Valorant**\n> <:point:1329708644098506804> Immortal 2+\n\n- <:tft:1329708007642107956> **Teamfight Tactics**\n> <:point:1329708644098506804> Master+`)
           ],
           components: [
             new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
               new ButtonBuilder()
-              .setCustomId('application:default')
-              .setStyle(ButtonStyle.Secondary)
-              .setLabel('Default Application'),
-
-              new ButtonBuilder()
-              .setCustomId('application:special')
-              .setStyle(ButtonStyle.Secondary)
-              .setLabel('Special Application')
+              .setStyle(ButtonStyle.Link)
+              .setLabel('Apply Now')
+              .setURL('https://evoboost.gg/jobs')
             )
           ]
         })
+
+        await interaction.reply({
+          content: `Setup complete in <#${channel.id}> for \`${selectedModule}\`.`,
+          ephemeral: true,
+        });
       }
         break;
 
