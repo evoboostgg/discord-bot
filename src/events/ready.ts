@@ -8,6 +8,6 @@ export default new Event({
   async execute(client: ExtendedClient): Promise<void> {
     await conncectDatabase()
     client.user?.setStatus(PresenceUpdateStatus.Online);
-    client.user?.setActivity('Aplpha Testing', { type: ActivityType.Watching });
+    client.user?.setActivity('Alpha Testing', { type: ActivityType.Watching });
   },
 });
