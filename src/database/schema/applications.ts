@@ -1,5 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+interface OrderDetail {
+  server: 'BR' | 'NA' | 'EUW' | 'EUNE';
+  queue: 'Solo' | 'Duo';
+  maxRank: string;
+}
+
 export interface IApplication extends Document {
   discordId: string;
   appliedRole: 'coach' | 'booster';
@@ -21,6 +27,8 @@ export interface IApplication extends Document {
   status: 'pending' | 'approved' | 'rejected';
   createdAt: Date;
   updatedAt: Date;
+  orderDetails: OrderDetail[];
+  hrReview: string;
 }
 
 const ApplicationSchema = new Schema({
@@ -136,6 +144,26 @@ const ApplicationSchema = new Schema({
     type: String,
     enum: ['pending', 'approved', 'rejected'],
     default: 'pending'
+  },
+  
+  orderDetails: [{
+    server: {
+      type: String,
+      trim: true
+    },
+    queue: {
+      type: String,
+    },
+    maxRank: {
+      type: String,
+      trim: true
+    }
+  }],
+
+  hrReview: {
+    type: String,
+    default: '',
+    maxlength: 2000
   }
 }, {
   timestamps: true

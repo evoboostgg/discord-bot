@@ -8,7 +8,8 @@ import {
   EmbedBuilder,
   ActionRowBuilder,
   ButtonBuilder,
-  ButtonStyle
+  ButtonStyle,
+  PermissionFlagsBits
 } from 'discord.js';
 import { Application } from '../../../database/schema/applications';
 import defaultConfig from 'src/config';
@@ -19,6 +20,7 @@ export default new SlashCommand({
   data: new SlashCommandBuilder()
     .setName('application')
     .setDescription('Manage applications')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addSubcommand((option) =>
       option
         .setName('procceed')
@@ -26,7 +28,7 @@ export default new SlashCommand({
         .addStringOption((option) =>
           option
             .setName('messagelink')
-            .setDescription('The message link')
+            .setDescription('The Discord message link of the application')
             .setRequired(true)
         )
         .addUserOption((option) =>
@@ -63,7 +65,36 @@ export default new SlashCommand({
           .setDescription('The reason for denying the application')
           .setRequired(true)
         )
-    ) as SlashCommandBuilder,
+    )
+    .addSubcommand((option) => 
+    option
+  .setName('orderdetails')
+ .setDescription('Set order details')
+ .addStringOption((option) => 
+  option
+ .setName('region')
+ .setDescription('The region of the order')
+.setRequired(true)
+)
+.addStringOption((option) => 
+  option
+ .setName('max-rank')
+ .setDescription('Max Rank')
+.setRequired(true)
+)
+.addStringOption((option) => 
+  option
+ .setName('queue')
+ .setDescription('Queue type')
+ .addChoices(
+  { name: 'Solo', value: 'solo' },
+  { name: 'Duo', value:'duo' },
+  { name: 'Flex', value:'flex' }
+ )
+.setRequired(true)
+)
+
+) as SlashCommandBuilder,
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
 
@@ -75,20 +106,21 @@ export default new SlashCommand({
           const messageLink = interaction.options.getString('messagelink', true);
           const applicant = interaction.options.getUser('applicant', true);
           
-          // Fix message link parsing
-          const linkRegex = /^https?:\/\/(?:ptb\.|canary\.)?discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)$/;
+          // Improved message link validation
+          const linkRegex = /^https?:\/\/(?:(?:ptb|canary)\.)?discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)\/?$/;
           const matches = messageLink.match(linkRegex);
           
           if (!matches) {
-            await interaction.editReply('Please provide a valid Discord message link.');
+            await interaction.editReply('Please provide a valid Discord message link.\nExample: https://discord.com/channels/serverid/channelid/messageid');
             return;
           }
     
           const [, guildId, channelId, messageId] = matches;
+
     
           const channel = interaction.client.channels.cache.get(channelId) as TextChannel;
           if (!channel) {
-            await interaction.editReply('Invalid channel or message link.');
+            await interaction.editReply('Cannot access the channel. Make sure the bot has proper permissions.');
             return;
           }
     
@@ -240,7 +272,7 @@ export default new SlashCommand({
             });
     
             if (confirmation.customId === 'cancel') {
-              await interaction.editReply({
+              await confirmation.update({
                 content: 'Application process cancelled.',
                 embeds: [],
                 components: []
@@ -331,17 +363,19 @@ export default new SlashCommand({
     
               await member?.send({ embeds: [welcomeEmbed] });
     
-              await interaction.editReply(`✅ Application processed!\n• Private channel created: ${privateChannel}\n• DM notification sent`);
-    
-              await interaction.editReply('Application successfully processed and saved to database.');
-    
+              await confirmation.editReply(`✅ Application processed!\n• Private channel created: ${privateChannel}\n• DM notification sent`);
             } 
-          } catch (error) {
-            await interaction.editReply({
-              content: 'Confirmation not received within 1 minute, operation cancelled.',
-              embeds: [],
-              components: []
-            });
+          } catch (error: any) {
+            if (error.code === 10062) {
+              await (interaction.channel as TextChannel)?.send({
+                content: 'The interaction has expired. Please try the command again.',
+              });
+            } else {
+              await(interaction.channel as TextChannel)?.send({
+                content: 'An error occurred while processing the application. Please try again.',
+              });
+            }
+            console.error('Error:', error);
           }
         } catch (error: any) {
           console.error('Error processing application:', error);
@@ -455,6 +489,11 @@ export default new SlashCommand({
         });
         await interaction.editReply('Application denied.');
         break;
+      }
+
+      case 'orderdetails': {
+        await interaction.deferReply();
+        const applicant = interaction.options.getUser('applicant', true);
       }
     
       default:
