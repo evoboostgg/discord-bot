@@ -205,6 +205,7 @@ export default new SlashCommand({
                   const gameName = name.replace(' Experience', '').toLowerCase();
                   applicationData.game = gameName === 'league of legends' ? 'league_of_legends' : 
                                        gameName === 'teamfight tactics' ? 'teamfight_tactics' : 
+                                       gameName === 'rocket league' ? 'rocket_league' :
                                        'valorant';
     
                   lines.forEach(line => {

@@ -20,7 +20,7 @@ export interface IApplication extends Document {
   city: string;
   postcode: string;
   country: string;
-  game: 'league_of_legends' | 'valorant' | 'teamfight_tactics';
+  game: 'league_of_legends' | 'valorant' | 'teamfight_tactics' | 'rocket_league';
   peakRank: string;
   proof: string;
   experience: string;
@@ -107,7 +107,7 @@ const ApplicationSchema = new Schema({
   },
   game: {
     type: String,
-    enum: ['league_of_legends', 'valorant', 'teamfight_tactics'],
+    enum: ['league_of_legends', 'valorant', 'teamfight_tactics', 'rocket_league'],
     required: true
   },
   peakRank: {
@@ -118,7 +118,8 @@ const ApplicationSchema = new Schema({
         const validRanks = {
           valorant: ['radiant', 'immortal3', 'imortal2'],
           league_of_legends: ['challenger', 'grandmaster', 'master'],
-          teamfight_tactics: ['challenger', 'grandmaster', 'master']
+          teamfight_tactics: ['challenger', 'grandmaster', 'master'],
+          rocket_league: ['gc2', 'gc3','ssl'],
         };
         const game = this.game as keyof typeof validRanks;
         return validRanks[game].includes(rank.toLowerCase());
